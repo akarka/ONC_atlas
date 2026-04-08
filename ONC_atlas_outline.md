@@ -7,17 +7,27 @@
 
 ## 0. Sistem Felsefesi ve Kapsam
 
-### 0.1 Temel prensipler
-Sistemin tüm katmanlarında geçerli olacak ilkeler belirlenir: dosya asla repo'ya girmez; NAS read-only ve izole kalır; metadata tek doğru kaynaktır (single source of truth); insan değil sistem tutarlılığı sağlar.
+### 0.1 Temel prensipler (Stratejik)
+Ofis yönetiminin dijital ikizi metadata üzerinden kurgulanır. 
+- **Metadata-First:** Tüm operasyonel (koordinasyon, pafta takibi, muhasebe) kararlar metadata üzerinden alınır; fiziksel dosya (DWG/PDF) sadece bu verinin bir çıktısıdır.
+- **Single Source of Truth (SSoT):** Her projenin tek bir "Dijital Kimliği" (onc_project.yaml) vardır; sistemler arası veri tutarlılığı bu kimlik üzerinden sağlanır.
+- **Otomasyon & Standart:** İnsan inisiyatifi yerine "Sihirbaz" (Wizard) tabanlı yapılandırmalar ile sistemin kendi kendini denetlemesi ve beslemesi esastır.
+- **Ayrık Mimari:** Veri kaynağı (NAS), Sistem Şartnamesi (Atlas/Git) ve Kullanıcı Arayüzü (External UI) birbirinden bağımsız ama protokollerle bağlı katmanlardır.
 
 ### 0.2 Kapsam sınırları
-Sistemin ne yaptığı kadar ne yapmadığı da tanımlanır. Proje yönetimi, takvim, görev takibi bu sistemin dışındadır. Arşiv, bilgi grafiği ve metadata yönetimi içindedir.
+Sistemin ne yaptığı kadar ne yapmadığı da tanımlanır. Bu Atlas; proje koordinasyonu, pafta takibi ve arşiv yönetiminin **mimari ve mantıksal çerçevesini (Master Specification) - projenin anayasasını -** belirler. Günlük operasyonel işlemler (takvim, görev takibi, saat girişi) bu Atlas'ta tanımlanan protokollere uygun olarak **harici arayüzlerde (External Dashboards)** gerçekleştirilir. Arşiv, bilgi grafiği ve metadata yönetimi sistemin çekirdeğidir. Harici veri görselleştirme ve raporlama araçlarına (BI tools, Custom Dashboards) veri beslemek sistemin temel hedefleri arasındadır.
 
 ### 0.3 Orkestratör rolü ve yönetişim
-Sistemin tek teknik sahibi olarak orkestratörün sorumluluğu, yetki sınırları ve BIM manager ile iş bölümü tanımlanır. Hangi kararlar kime aittir?
+Orkestratör, teknik altyapı ile ofis operasyonu arasındaki köprüdür.
+- **Sistem Mimarı:** Metadata şemasını, veri standartlarını ve sistemin mantıksal mimarisini (Atlas/Spec) belirler.
+- **Veri Denetçisi:** Harici arayüzlerdeki (DataViz/Dashboard) verilerin doğruluğunu ve "Master Metadata" (YAML) ile tutarlılığını denetler.
+- **Yönetişim & İş Birliği:** BIM Manager ile pafta/model standartları; yönetim birimiyle ise muhasebe/koordinasyon çıktıları üzerinde iş birliği yapar. Karar alma ve yetki sınırları bu rolde merkezileşir.
 
 ### 0.4 Faz planı
-Faz 1 (vault + git kurulumu), Faz 2 (orkestrasyon olgunlaşması), Faz 3 (ekip arayüzü) arasındaki geçiş kriterleri belirlenir. Her faz kendi içinde tamamlanmış ve işlevsel olmalıdır.
+Sistemin kurulumu üç ana faza yayılır:
+- **Faz 1: Master Specification & Proto-Arşiv:** Atlas (Git/Obsidian) üzerinden şartnamenin (isimlendirme, şema, protokoller) dondurulması. Sihirbaz (Wizard) prototipinin geliştirilmesi ve NAS üzerindeki "Legacy" projelerin YAML dosyalarının oluşturulmaya başlanması.
+- **Faz 2: Data Bridge & Reporting:** NAS'tan veriyi çeken "Indexer" (Dizinleyici) ve merkezi veritabanının (SQL) kurulması. Yönetim ve Muhasebe için veri görselleştirme ve raporlama arayüzlerinin yayına alınması.
+- **Faz 3: Operational Ecosystem:** Ekip içi koordinasyon arayüzünün (Revizyon talebi, RFI, Pafta Takibi) tam fonksiyonel olarak devreye alınması. Çalışan ve saat takibi (Advanced Phase) modüllerinin entegrasyonu.
 
 ---
 
@@ -124,11 +134,16 @@ BIM modellerine özgü isimlendirme ve klasör yapısı, genel CAD standardıyla
 ### 6.1 Metadata mimarisi kararları
 Flat vs. hiyerarşik metadata, zorunlu vs. opsiyonel alanlar, kontrollü kelime dağarcığı (controlled vocabulary) kullanımı kararlaştırılır. ISO 19650 property set mantığından ne kadar ilham alınır?
 
-### 6.2 Temel varlık kaydı alanları
-Her metadata kaydında bulunması zorunlu alanlar listelenir: benzersiz ID, proje kodu, disiplin, tip, aşama, statü, tarih, yazar, NAS path, ilgili varlıklar (links).
+### 6.2 Ana Proje Künyesi (onc_project.yaml)
+Her proje klasörünün kök dizininde bulunacak tekil metadata dosyası tanımlanır. Bu dosya projenin "Dijital Kimliği"dir.
+- **Zorunlu Alanlar:** `uuid` (sistem genelinde tekil), `project_code` (ofis kodu), `project_name`, `client`, `status`, `phase`.
+- **Lokasyon Verisi:** `nas_path`, `server_id`.
+- **Sorumluluklar:** `project_lead_id`, `bim_manager_id`.
 
-### 6.3 Genişletilmiş alanlar ve varlık türüne özgü metadata
-Çizime özgü (ölçek, görünüş türü), rapora özgü (konu, alıcı), fotoğrafa özgü (konum, çekim tarihi) gibi tür bazlı ek alanlar tanımlanır.
+### 6.3 Gömülü Pafta ve Varlık Listesi
+"Tek dosya" prensibi gereği, projeye ait tüm pafta listesi (Sheet List) ana künye dosyası (`onc_project.yaml`) içerisinde bir dizi (array) olarak tutulur.
+- **Pafta Metadata Alanları:** `sheet_id`, `title`, `discipline`, `current_rev`, `issue_date`.
+- **Hacim Yönetimi:** Çok sayıda pafta içeren projelerde YAML yapısının hiyerarşik organizasyonu belirlenir.
 
 ### 6.4 Etiket (tag) taksonomisi
 Obsidian'da kullanılacak tag hiyerarşisi tasarlanır. Düz mı (`#yapim`) yoksa iç içe mi (`#aşama/yapim`)? Tag sayısı ve disiplini nasıl korunur?
@@ -138,6 +153,9 @@ Varlıklar arası ilişkiler nasıl temsil edilir: `[[wikilink]]` mi, özel fron
 
 ### 6.6 Metadata girişi ve kalite kontrolü
 Yeni bir varlık kaydı nasıl oluşturulur? Şablonlar, zorunlu alan kontrolü, tutarsız girişlerin tespiti için Dataview sorguları planlanır.
+
+### 6.7 Harici Entegrasyon ve Raporlama (DataViz vb.)
+Metadata şemasının, harici iş zekası araçlarına (PowerBI, Tableau, Custom Dashboards) girdi sağlayacak şekilde yapılandırılması planlanır. Verinin taşınabilirliği (JSON/CSV export) ve ilişkisel yapısının korunması bu başlık altında ele alınır.
 
 ---
 
@@ -193,6 +211,11 @@ Sözleşme bedelleri, kişisel veriler, müvekkil gizlilik gereksinimleri — bu
 ### 9.4 Felaket kurtarma planı
 Sistemi kimin, ne zaman, nasıl yedekleyeceği. Orkestratör ofisten ayrılırsa ne olur — bilgi transferi protokolü.
 
+### 9.5 Sistem Performansı ve Tarama Güvenliği
+NAS üzerindeki metadata dosyalarının taranması (indexing) için güvenlik protokolleri belirlenir.
+- **Read-Only Access:** İndeksleyici servislerin sadece okuma yetkisiyle sınırlandırılması.
+- **Scheduled vs Event-Driven:** Devasa taramalar yerine olay bazlı (Wizard tetiklemeli) ve artımlı (incremental) tarama stratejilerinin uygulanması.
+
 ---
 
 ## 10. Gelecek Faz — Ekip Arayüzü
@@ -215,6 +238,21 @@ Ekip arayüzünü nasıl öğrenecek? Eğitim materyali, yardım dokümantasyonu
 
 ### A. Referans standartlar
 - ISO 19650 (BIM bilgi yönetimi)
+- BS EN ISO 19650-2 (teslim aşaması)
+- AIA CAD Layer Guidelines
+- OmniClass / Uniclass sınıflandırma sistemleri
+- RIBA Plan of Work aşama karşılıkları
+
+### B. Karar günlüğü
+Sistem geliştirme sürecinde alınan kararlar, gerekçeleri ve alternatifleriyle birlikte burada biriktirilir. Bu belge orkestratör + BIM manager toplantılarının çıktısıdır.
+
+### C. Açık sorular
+Henüz netleşmemiş, BIM manager veya yönetim kararı gerektiren maddeler listesi. Canlı belge olarak tutulur.
+
+---
+
+*Versiyon: 0.1 — Taslak*
+*Sonraki adım: Her başlık için ayrı detay .md dosyası (CLI agent ile)*netimi)
 - BS EN ISO 19650-2 (teslim aşaması)
 - AIA CAD Layer Guidelines
 - OmniClass / Uniclass sınıflandırma sistemleri
