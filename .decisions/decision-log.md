@@ -1,14 +1,9 @@
-# Karar Günlüğü
+# Decision Log
 
-## [2026-04-08] Varlık Sınıflandırması ve BIM Entegrasyonu
-- **Konu:** Çizim, rapor, mail ve sözleşmelerin saklanma prensipleri; BIM varlıklarının entegrasyonu.
-- **Karar:** 
-  - Çizimler ve raporlar tanımlanmış klasörlerde tutulacak.
-  - BIM varlıkları sisteme entegre edilecek ve aynı `onc_project.yaml` proje künyesi formatını kullanacak.
-- **Bekleyen (Açık) Sorular:**
-  - Revizyon takibi için mailler de arşivlenecek mi? (`<yönetici-input>`)
-  - Sözleşmeler/mali dokümanlar RBAC (role-based-access) ile mi korunacak? (`<yönetici-input>`)
-- **Etkilenen Dosyalar:** 
-  - [[1.1_varlik_turlerinin_siniflandirilmasi]]
-  - [[5.6_model_isimlendirme_ve_klasor_yapisi]]
-  - [[9.3_hassas_veri_politikasi]]
+### 2026-04-09: Bölüm 2 Konsolidasyonu (İsimlendirme ve Kodlama)
+- **Summary:** 2.1, 2.2, 2.3 ve 2.4 maddeleri "İsimlendirme ve Kodlama Standartları" altında tek maddede birleştirildi. 20 yıllık arşiv (Legacy) için metadata zorunluluğu esnetilerek "Active/Legacy" ayrımı getirildi. 2.5 maddesi 2.2 olarak re-numaralandırıldı.
+- **Affected Files:**
+  - `ONC_atlas_outline.md`
+  - `Atlas_Maddeler/2.1_isimlendirme_ve_kodlama_standartlari.md` (Yeni)
+  - `Atlas_Maddeler/2.2_gecici_ve_calisma_dosyalari_kurali.md` (Güncellendi)
+  - `Atlas_Maddeler/2.1...2.4...` (Silindi)

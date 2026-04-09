@@ -21,13 +21,10 @@
 ### [[1.4_belge_statu_ve_olgunluk_seviyeleri|1.4 Belge statü ve olgunluk seviyeleri]]
 ---
 
-## 2. İsimlendirme Standardı
+## 2. İsimlendirme ve Kodlama Standartları
 
-### [[2.1_dosya_isimlendirme_konvansiyonu|2.1 Dosya isimlendirme konvansiyonu]]
-### [[2.2_klasor_isimlendirme_konvansiyonu|2.2 Klasör isimlendirme konvansiyonu]]
-### [[2.3_proje_kodlama_sistemi|2.3 Proje kodlama sistemi]]
-### [[2.4_revizyon_ve_versiyon_notasyonu|2.4 Revizyon ve versiyon notasyonu]]
-### [[2.5_gecici_ve_calisma_dosyalari_kurali|2.5 Geçici ve çalışma dosyaları kuralı]]
+### [[2.1_isimlendirme_ve_kodlama_standartlari|2.1 İsimlendirme ve kodlama standartları]]
+### [[2.2_gecici_ve_calisma_dosyalari_kurali|2.2 Geçici ve çalışma dosyaları kuralı]]
 ---
 
 ## 3. Klasör Hiyerarşisi (NAS)
@@ -51,12 +48,8 @@
 
 ## 5. BIM Standartları
 
-### [[5.1_bim_kullanim_hedefleri_bim_uses|5.1 BIM kullanım hedefleri (BIM Uses)]]
-### [[5.2_lod_level_of_development_matrisi|5.2 LOD (Level of Development) matrisi]]
-### [[5.3_model_koordinasyon_protokolu|5.3 Model koordinasyon protokolü]]
-### [[5.4_ifc_cikti_standardi|5.4 IFC çıktı standardı]]
-### [[5.5_bim_cad_metadata_ucgeninin_yonetimi|5.5 BIM — CAD — metadata üçgeninin yönetimi]]
-### [[5.6_model_isimlendirme_ve_klasor_yapisi|5.6 Model isimlendirme ve klasör yapısı]]
+(bkz - BIM Management)
+
 ---
 
 ## 6. Metadata Şeması
